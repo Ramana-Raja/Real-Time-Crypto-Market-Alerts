@@ -12,7 +12,7 @@
         const ws = new WebSocket('ws://localhost:8080/ws');
         
         ws.onopen = function() {
-            document.getElementById('status').innerHTML = '✅ Connected';
+            document.getElementById('status').innerHTML = 'Connected';
             console.log('Connected to WebSocket');
         };
         
@@ -24,19 +24,19 @@
             div.style.margin = '5px';
             div.style.backgroundColor = '#ffeb3b';
             div.innerHTML = `
-                🚨 ALERT: ${alert.symbol} hit $${alert.price.toFixed(2)} 
+                ALERT: ${alert.symbol} hit $${alert.price.toFixed(2)}
                 (threshold: $${alert.threshold.toFixed(2)} ${alert.type})
             `;
             document.getElementById('messages').prepend(div);
         };
         
         ws.onerror = function(error) {
-            document.getElementById('status').innerHTML = '❌ Error';
+            document.getElementById('status').innerHTML = 'Error';
             console.error('WebSocket error:', error);
         };
         
         ws.onclose = function() {
-            document.getElementById('status').innerHTML = '🔴 Disconnected';
+            document.getElementById('status').innerHTML = 'Disconnected';
             console.log('Disconnected');
         };
     </script>
