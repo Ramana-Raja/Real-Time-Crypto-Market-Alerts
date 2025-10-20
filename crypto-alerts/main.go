@@ -16,7 +16,6 @@ import (
 	ws "crypto-alerts/websocket"
 )
 
-// CORS middleware
 func corsMiddleware(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Access-Control-Allow-Origin", "*")
@@ -32,7 +31,6 @@ func corsMiddleware(h http.Handler) http.Handler {
 	})
 }
 
-// Handler to get list of products
 func getProducts(db *database.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		products, err := db.GetProducts()
@@ -45,7 +43,6 @@ func getProducts(db *database.DB) http.HandlerFunc {
 	}
 }
 
-// Handler to get list of alert rules
 func getAlerts(db *database.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		// Get user_id from query param or use demo-user
@@ -64,7 +61,6 @@ func getAlerts(db *database.DB) http.HandlerFunc {
 	}
 }
 
-// Handler to create new alert rule
 func createAlert(db *database.DB, engine *alerts.Engine) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var rule database.AlertRule
@@ -162,7 +158,7 @@ func main() {
 	alertChan := engine.GetAlertChannel()
 	go func() {
 		for alert := range alertChan {
-			log.Printf("🚨 ALERT FIRED: %s hit $%.2f (threshold: $%.2f %s)",
+			log.Printf("ALERT FIRED: %s hit $%.2f (threshold: $%.2f %s)",
 				alert.Symbol, alert.Price, alert.Threshold, alert.Type)
 
 			// Save to database
