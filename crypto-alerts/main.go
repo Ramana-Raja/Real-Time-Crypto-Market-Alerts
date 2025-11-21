@@ -8,13 +8,13 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/gorilla/mux"
-
 	"crypto-alerts/alerts"
 	"crypto-alerts/api"
 	"crypto-alerts/database"
 	ws "crypto-alerts/websocket"
+	"github.com/gorilla/mux"
 )
+import "os"
 
 func corsMiddleware(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -51,13 +51,13 @@ func getAlerts(db *database.DB) http.HandlerFunc {
 			userID = "demo-user"
 		}
 
-		alerts, err := db.GetUserAlertRules(userID)
+		alerts_1, err := db.GetUserAlertRules(userID)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(alerts)
+		json.NewEncoder(w).Encode(alerts_1)
 	}
 }
 
@@ -115,7 +115,28 @@ func deleteAlert(db *database.DB, engine *alerts.Engine) http.HandlerFunc {
 
 func main() {
 	// Connect to PostgreSQL
-	db, err := database.NewDB("localhost", "5432", "postgres", "password123", "crypto_alerts")
+	host := os.Getenv("DB_HOST")
+	if host == "" {
+		host = "localhost"
+	}
+	port := os.Getenv("DB_PORT")
+	if port == "" {
+		port = "5432"
+	}
+	user := os.Getenv("DB_USER")
+	if user == "" {
+		user = "postgres"
+	}
+	password := os.Getenv("DB_PASSWORD")
+	if password == "" {
+		password = "password123"
+	}
+	dbname := os.Getenv("DB_NAME")
+	if dbname == "" {
+		dbname = "crypto_alerts"
+	}
+
+	db, err := database.NewDB(host, port, user, password, dbname)
 	if err != nil {
 		log.Fatal("Database connection failed: ", err)
 	}

@@ -1,7 +1,8 @@
 import { StyleSheet, Text, View, FlatList, TouchableOpacity, Alert } from 'react-native';
 import { useEffect, useState } from 'react';
 
-const API_URL = 'http://10.18.34.229:8080/api';
+const API_URL = 'http://<YOUR_PC_IP>:8080/api';
+
 
 type AlertRule = {
     id: number;

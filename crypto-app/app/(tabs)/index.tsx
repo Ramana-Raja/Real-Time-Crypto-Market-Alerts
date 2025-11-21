@@ -2,8 +2,9 @@ import { StyleSheet, Text, View, FlatList, TextInput, TouchableOpacity, Alert as
 import { useEffect, useState } from 'react';
 import { useWebSocket } from '../../hooks/useWebSocket';
 
-const API_URL = 'http://10.18.34.229:8080/api';
-const WS_URL = 'ws://10.18.34.229:8080/ws';
+const API_URL = 'http://<YOUR_PC_IP>:8080/api'; 
+const WS_URL = 'ws://<YOUR_PC_IP>:8080/ws';
+
 
 type Product = {
     id: number;
