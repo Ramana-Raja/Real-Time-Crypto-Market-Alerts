@@ -34,7 +34,7 @@ func NewEngine(db *database.DB) *Engine {
 		rules:         []database.AlertRule{},
 		alertChan:     make(chan Alert, 100),
 		lastTriggered: make(map[int]time.Time),
-		cooldown:      5 * time.Minute, // Don't spam same alert within 5 minutes
+		cooldown:      5 * time.Minute,
 	}
 
 	engine.LoadRules()
@@ -47,12 +47,12 @@ func (e *Engine) LoadRules() {
 
 	rules, err := e.db.GetActiveAlertRules()
 	if err != nil {
-		log.Println("❌ Error loading rules:", err)
+		log.Println("error loading rules", err)
 		return
 	}
 
 	e.rules = rules
-	log.Printf("✅ Loaded %d active alert rules", len(rules))
+	log.Printf("loaded active alert rules")
 }
 
 func (e *Engine) EvaluatePrice(price websocket.PriceUpdate, productID int) {

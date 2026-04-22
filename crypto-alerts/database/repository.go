@@ -40,7 +40,7 @@ func (db *DB) CreateAlertRule(rule *AlertRule) error {
 		return err
 	}
 
-	log.Printf("Created alert rule ID: %d", rule.ID)
+	log.Printf("created alert rule ID:%d", rule.ID)
 	return nil
 }
 

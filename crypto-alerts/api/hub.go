@@ -32,14 +32,14 @@ func (h *Hub) Run() {
 			h.mu.Lock()
 			h.clients[client] = true
 			h.mu.Unlock()
-			log.Printf("📱 Client connected. Total clients: %d", len(h.clients))
+			log.Printf("client connected,Total clients:%d", len(h.clients))
 
 		case client := <-h.unregister:
 			h.mu.Lock()
 			if _, ok := h.clients[client]; ok {
 				delete(h.clients, client)
 				close(client.send)
-				log.Printf("📱 Client disconnected. Total clients: %d", len(h.clients))
+				log.Printf("client disconnected,Total clients:%d", len(h.clients))
 			}
 			h.mu.Unlock()
 
@@ -55,7 +55,7 @@ func (h *Hub) Run() {
 				}
 			}
 			h.mu.RUnlock()
-			log.Printf("📤 Broadcasted alert to %d clients", len(h.clients))
+			log.Printf("broadcasted alert to %d clients", len(h.clients))
 		}
 	}
 }

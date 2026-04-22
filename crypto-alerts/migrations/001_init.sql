@@ -1,36 +1,36 @@
--- Products table
-CREATE TABLE products (
-    id SERIAL PRIMARY KEY,
-    symbol VARCHAR(20) UNIQUE NOT NULL,
-    name VARCHAR(100) NOT NULL,
-    created_at TIMESTAMP DEFAULT NOW()
-);
+-- Create products table if not exists
+CREATE TABLE IF NOT EXISTS products (
+                                        id SERIAL PRIMARY KEY,
+                                        symbol VARCHAR(20) NOT NULL UNIQUE,
+    name VARCHAR(100) NOT NULL
+    );
 
--- Alert rules table
-CREATE TABLE alert_rules (
-    id SERIAL PRIMARY KEY,
-    user_id VARCHAR(100) NOT NULL,
-    product_id INT REFERENCES products(id) ON DELETE CASCADE,
-    threshold_type VARCHAR(10) NOT NULL CHECK (threshold_type IN ('above', 'below')),
-    threshold_value DECIMAL(18,8) NOT NULL,
-    is_active BOOLEAN DEFAULT true,
-    created_at TIMESTAMP DEFAULT NOW()
-);
+-- Create alert_rules table if not exists
+CREATE TABLE IF NOT EXISTS alert_rules (
+                                           id SERIAL PRIMARY KEY,
+                                           product_id INTEGER NOT NULL REFERENCES products(id) ON DELETE CASCADE,
+    target_price DECIMAL(20, 8) NOT NULL,
+    condition VARCHAR(10) NOT NULL CHECK (condition IN ('above', 'below')),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
 
--- Triggered alerts table
-CREATE TABLE triggered_alerts (
-    id SERIAL PRIMARY KEY,
-    rule_id INT REFERENCES alert_rules(id) ON DELETE CASCADE,
-    price DECIMAL(18,8) NOT NULL,
-    triggered_at TIMESTAMP DEFAULT NOW()
-);
+-- Create triggered_alerts table if not exists
+CREATE TABLE IF NOT EXISTS triggered_alerts (
+                                                id SERIAL PRIMARY KEY,
+                                                alert_id INTEGER NOT NULL REFERENCES alert_rules(id) ON DELETE CASCADE,
+    triggered_price DECIMAL(20, 8) NOT NULL,
+    triggered_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
 
--- Indexes for performance
-CREATE INDEX idx_alert_rules_user ON alert_rules(user_id);
-CREATE INDEX idx_alert_rules_active ON alert_rules(is_active);
-CREATE INDEX idx_triggered_alerts_rule ON triggered_alerts(rule_id);
+-- Create index for performance
+CREATE INDEX IF NOT EXISTS idx_alert_rules_product_id ON alert_rules(product_id);
+CREATE INDEX IF NOT EXISTS idx_triggered_alerts_alert_id ON triggered_alerts(alert_id);
 
--- Insert initial products
-INSERT INTO products (id, symbol, name) VALUES 
-    (1, 'BTC-USD', 'Bitcoin'),
-    (2, 'ETH-USD', 'Ethereum');
+-- Insert initial products (safe to run multiple times)
+INSERT INTO products (symbol, name)
+VALUES ('BTC-USD', 'Bitcoin')
+    ON CONFLICT (symbol) DO NOTHING;
+
+INSERT INTO products (symbol, name)
+VALUES ('ETH-USD', 'Ethereum')
+    ON CONFLICT (symbol) DO NOTHING;

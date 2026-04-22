@@ -12,6 +12,7 @@ import (
 	"crypto-alerts/api"
 	"crypto-alerts/database"
 	ws "crypto-alerts/websocket"
+
 	"github.com/gorilla/mux"
 )
 import "os"
@@ -211,7 +212,7 @@ func main() {
 	})
 
 	// Start server
-	fmt.Println("🚀 Server running on http://localhost:8080")
-	fmt.Println("📡 WebSocket endpoint: ws://localhost:8080/ws")
+	fmt.Println("Server running on http://localhost:8080")
+	fmt.Println(" WebSocket endpoint: ws://localhost:8080/ws")
 	log.Fatal(http.ListenAndServe(":8080", corsMiddleware(router)))
 }

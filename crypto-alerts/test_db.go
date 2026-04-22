@@ -7,14 +7,13 @@ import (
 )
 
 func main() {
-	// Connect to database
 	db, err := database.NewDB("localhost", "5432", "postgres", "password123", "crypto_alerts")
 	if err != nil {
 		log.Fatal("Connection failed:", err)
 	}
 	defer db.Close()
 
-	fmt.Println("\n=== TEST 1: Get Products ===")
+	fmt.Println("test 1:get products")
 	products, err := db.GetProducts()
 	if err != nil {
 		log.Fatal(err)
@@ -23,7 +22,7 @@ func main() {
 		fmt.Printf("ID: %d, Symbol: %s, Name: %s\n", p.ID, p.Symbol, p.Name)
 	}
 
-	fmt.Println("\n=== TEST 2: Create Alert Rule ===")
+	fmt.Println("test 2: get products")
 	rule := &database.AlertRule{
 		UserID:         "test-user",
 		ProductID:      1,
@@ -36,7 +35,7 @@ func main() {
 	}
 	fmt.Printf("Created rule with ID: %d\n", rule.ID)
 
-	fmt.Println("\n=== TEST 3: Get Active Rules ===")
+	fmt.Println("test 3: get rules")
 	rules, err := db.GetActiveAlertRules()
 	if err != nil {
 		log.Fatal(err)
@@ -46,7 +45,7 @@ func main() {
 			r.ID, r.ProductID, r.ThresholdType, r.ThresholdValue)
 	}
 
-	fmt.Println("\n=== TEST 4: Get User Rules ===")
+	fmt.Println("test 4: get user rules")
 	userRules, err := db.GetUserAlertRules("test-user")
 	if err != nil {
 		log.Fatal(err)

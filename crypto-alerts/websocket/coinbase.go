@@ -31,7 +31,7 @@ func (c *Client) Connect() error {
 		return err
 	}
 	c.conn = conn
-	log.Println("✅ Connected to Coinbase WebSocket")
+	log.Println("connected to Coinbase WebSocket")
 	return nil
 }
 
@@ -51,11 +51,10 @@ func (c *Client) ReadMessages(priceChan chan PriceUpdate) {
 		var msg map[string]interface{}
 		err := c.conn.ReadJSON(&msg)
 		if err != nil {
-			log.Println("❌ Read error:", err)
+			log.Println("Read error:", err)
 			return
 		}
 
-		// Parse ticker events
 		if msg["channel"] == "ticker" {
 			events, ok := msg["events"].([]interface{})
 			if !ok {

@@ -27,7 +27,7 @@ func NewDB(host, port, user, password, dbname string) (*DB, error) {
 		return nil, err
 	}
 
-	log.Println("✅ Database connected successfully")
+	log.Println("database connected")
 	return &DB{conn: conn}, nil
 }
 
